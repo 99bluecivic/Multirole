@@ -5,7 +5,7 @@ RUN apk add --no-cache --repository "@testing http://dl-cdn.alpinelinux.org/alpi
 
 # Install all the development environment that Multirole needs.
 FROM base AS base-dev
-RUN apk add --no-cache --repository "@testing http://dl-cdn.alpinelinux.org/alpine/edge/testing" boost-dev fmt-dev g++ gperftools-dev@testing libgit2-dev meson ninja openssl-dev sqlite-dev && \
+RUN apk add --no-cache --repository "@testing http://dl-cdn.alpinelinux.org/alpine/edge/testing" boost-dev fmt-dev g++ git gperftools-dev@testing libgit2-dev meson ninja openssl-dev sqlite-dev && \
 	rm -rf /var/log/* /tmp/* /var/tmp/*
 
 # Build multirole, stripping debug symbols to their own files.

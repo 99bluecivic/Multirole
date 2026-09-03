@@ -15,6 +15,7 @@
 #include "Service/CoreProvider.hpp"
 #include "Service/DataProvider.hpp"
 #include "Service/LogHandler.hpp"
+#include "Service/MatchReporter.hpp"
 #include "Service/ReplayManager.hpp"
 #include "Service/ScriptProvider.hpp"
 
@@ -32,6 +33,7 @@ private:
 	boost::asio::executor_work_guard<boost::asio::io_context::executor_type> lIoCtxGuard;
 	unsigned int hostingConcurrency;
 	Service::LogHandler logHandler;
+	Service::MatchReporter matchReporter;
 	Service::BanlistProvider banlistProvider;
 	Service::CoreProvider coreProvider;
 	Service::DataProvider dataProvider;

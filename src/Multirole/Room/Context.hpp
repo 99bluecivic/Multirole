@@ -157,6 +157,8 @@ private:
 	int duelsHad{};
 	uint8_t isTeam1GoingFirst{};
 	std::array<int32_t, 2U> wins{};
+	std::vector<uint8_t> duelWinners;
+	bool matchReported{};
 
 	// Get if tiebreaker mode is enabled (match last until there is a winner).
 	bool IsTiebreaking() const noexcept;
@@ -183,6 +185,8 @@ private:
 
 	// Creates and sends to all a chat message from a client.
 	void MakeAndSendChat(Client& client, std::string_view msg) noexcept;
+	void AnnounceScore() noexcept;
+	void ReportFinalMatch() noexcept;
 
 	// Creates a YGOPro::Deck from the given vectors, making sure
 	// that the deck is only composed of non-zero card codes, also,

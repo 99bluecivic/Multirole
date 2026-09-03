@@ -1,0 +1,1 @@
+Connection lost should not generate API call. Would result in too many false results that I don't want.

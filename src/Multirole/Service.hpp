@@ -11,6 +11,7 @@ struct Service final
 	SERVICE(CoreProvider, coreProvider)
 	SERVICE(DataProvider, dataProvider)
 	SERVICE(LogHandler, logHandler)
+	SERVICE(MatchReporter, matchReporter)
 	SERVICE(ReplayManager, replayManager)
 	SERVICE(ScriptProvider, scriptProvider)
 #undef SERVICE

@@ -1,0 +1,19 @@
+{
+    "name": "Multirole Development",
+    "build": {
+        "dockerfile": "../Dockerfile",
+        "context": "..",
+        "target": "base-dev"
+    },
+    "forwardPorts": [7911, 7922],
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "mhutchie.git-graph"
+            ]
+        }
+    },
+    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+    "remoteUser": "root",
+    "shutdownAction": "stopContainer"
+}

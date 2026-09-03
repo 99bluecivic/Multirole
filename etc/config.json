@@ -3,6 +3,10 @@
 	"lobbyListingPort": 7922,
 	"lobbyMaxConnections": 4,
 	"roomHostingPort": 7911,
+	"matchReporter": {
+		"enabled": true,
+		"uri": "https://99bluecivic.free.beeceptor.com"
+	},
 	"repos": [
 		{
 			"name": "scripts",

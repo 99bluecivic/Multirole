@@ -597,6 +597,7 @@ StateVariant Context::Finish(State::Dueling& s, const DuelFinishReason& dfr) noe
 	case Reason::REASON_TIMED_OUT:
 	case Reason::REASON_WRONG_RESPONSE:
 	{
+		duelWinners.push_back(dfr.winner);
 		// Send corresponding game finishing messages
 		if(dfr.reason == Reason::REASON_SURRENDERED)
 			SendWinMsg(WIN_REASON_SURRENDERED);
@@ -612,6 +613,7 @@ StateVariant Context::Finish(State::Dueling& s, const DuelFinishReason& dfr) noe
 		if(dfr.winner != 2U)
 		{
 			wins[dfr.winner] += (s.matchKillReason.has_value()) ? neededWins : 1U;
+			AnnounceScore();
 			if(wins[dfr.winner] >= neededWins)
 			{
 				SendToAll(MakeDuelEnd());
@@ -636,7 +638,14 @@ StateVariant Context::Finish(State::Dueling& s, const DuelFinishReason& dfr) noe
 	}
 	case Reason::REASON_CONNECTION_LOST:
 	{
+		duelWinners.push_back(dfr.winner);
 		SendWinMsg(WIN_REASON_CONNECTION_LOST);
+		if(dfr.winner <= 1U)
+		{
+			// The match ends immediately, so retain the forfeiture in the
+			// final result without announcing an incomplete round.
+			wins[dfr.winner]++;
+		}
 		[[fallthrough]];
 	}
 	default:

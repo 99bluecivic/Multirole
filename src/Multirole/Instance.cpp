@@ -44,6 +44,7 @@ Instance::Instance(const boost::json::value& cfg) :
 	lIoCtxGuard(boost::asio::make_work_guard(lIoCtx)),
 	hostingConcurrency(GetConcurrency(cfg.at("concurrencyHint").to_number<int>())),
 	logHandler(auxIoCtx, cfg.at("logHandler").as_object()),
+	matchReporter(auxIoCtx, logHandler, cfg.at("matchReporter").as_object()),
 	banlistProvider(logHandler, cfg.at("banlistProvider").at("fileRegex").as_string()),
 	coreProvider(
 		logHandler,
@@ -57,7 +58,7 @@ Instance::Instance(const boost::json::value& cfg) :
 		cfg.at("replayManager").at("save").as_bool(),
 		cfg.at("replayManager").at("path").as_string().data()),
 	scriptProvider(logHandler, cfg.at("scriptProvider").at("fileRegex").as_string()),
-	service({banlistProvider, coreProvider, dataProvider, logHandler,
+	service({banlistProvider, coreProvider, dataProvider, logHandler, matchReporter,
 		replayManager, scriptProvider}),
 	lobby(cfg.at("lobbyMaxConnections").to_number<int>()),
 	lobbyListing(

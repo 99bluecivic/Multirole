@@ -5,6 +5,7 @@ namespace Ignis::Multirole::Room
 
 StateOpt Context::operator()(State::Closing& /*unused*/) noexcept
 {
+	ReportFinalMatch();
 	{
 		std::scoped_lock lock(mDuelists);
 		for(const auto& kv : duelists)

@@ -1,9 +1,15 @@
 #include "Context.hpp"
 
+#include <algorithm>
+#include <exception>
+
+#include <fmt/format.h>
+
 #include "../I18N.hpp"
 #include "../STOCMsgFactory.hpp"
 #include "../Service/DataProvider.hpp"
 #include "../Service/LogHandler.hpp"
+#include "../Service/MatchReporter.hpp"
 #include "../YGOPro/Banlist.hpp"
 #include "../YGOPro/CardDatabase.hpp"
 #include "../YGOPro/Constants.hpp"
@@ -74,7 +80,7 @@ DuelistsMap Context::GetDuelistsNames() const noexcept
 bool Context::IsTiebreaking() const noexcept
 {
 	// FIXME: Actually read hostInfo when client is updated to handle it.
-	return true;
+	return false;
 }
 
 uint8_t Context::GetSwappedTeam(uint8_t team) const noexcept
@@ -162,6 +168,65 @@ void Context::MakeAndSendChat(Client& client, std::string_view msg) noexcept
 	}
 	if(!isPrivate && rl)
 		rl->Log(I18N::ROOM_LOGGER_CHAT, client.Name(), client.Ip(), msg);
+}
+
+void Context::AnnounceScore() noexcept
+{
+	try
+	{
+		const auto& player1 = duelists.at({0U, 0U})->Name();
+		const auto& player2 = duelists.at({1U, 0U})->Name();
+		SendToAll(MakeChat(
+			CHAT_MSG_TYPE_INFO,
+			fmt::format(
+				I18N::CLIENT_ROOM_SCORE_ANNOUNCEMENT,
+				player1,
+				wins[0U],
+				wins[1U],
+				player2)));
+	}
+	catch(const std::exception& e)
+	{
+		if(rl)
+			rl->Log("Unable to announce match score: {}", e.what());
+	}
+}
+
+void Context::ReportFinalMatch() noexcept
+{
+	if(matchReported || !isStarted)
+		return;
+	matchReported = true;
+	try
+	{
+		MatchReport report;
+		report.score = {
+			static_cast<uint32_t>(std::max(wins[0U], int32_t{})),
+			static_cast<uint32_t>(std::max(wins[1U], int32_t{}))
+		};
+		report.duelWinners = duelWinners;
+		for(const auto& [pos, client] : duelists)
+		{
+			MatchReportPlayer player;
+			player.name = client->Name();
+			player.team = pos.first;
+			player.position = pos.second;
+			if(const auto* deck = client->OriginalDeck(); deck != nullptr)
+			{
+				player.main = deck->Main();
+				player.extra = deck->Extra();
+				player.side = deck->Side();
+			}
+			report.players.emplace_back(std::move(player));
+		}
+		svc.matchReporter.Report(report);
+	}
+	catch(const std::exception& e)
+	{
+		svc.logHandler.Log(
+			ServiceType::MULTIROLE, Level::ERROR,
+			I18N::MATCH_REPORTER_REQUEST_ERROR, e.what());
+	}
 }
 
 std::unique_ptr<YGOPro::Deck> Context::LoadDeck(

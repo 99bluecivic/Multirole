@@ -18,6 +18,7 @@ Docker containers are provided at [Dockerhub](https://hub.docker.com/r/dyxel/mul
   * Automatic scripts, databases, banlists and core updates through remote git repositories pulling + webhook mechanism.
   * Flexible script and core error logging mechanism.
   * Optional server-side replay saving, for debug or analytic purposes.
+  * Optional asynchronous HTTPS match result reporting.
   * Optional room notes and chat logging, for moderation purposes.
   * Easy compilation and deployment through docker with very small container image.
 
@@ -62,6 +63,12 @@ The configuration file must be placed in the same working directory as Multirole
   * `lobbyMaxConnections`: Maximum number of connections a single IP can have to the lobby. Any negative value disables this check.
 
   * `roomHostingPort`: Port that will be used by the client to host new rooms, or to join rooms that were previously fetched.
+
+  * `matchReporter`: Optional asynchronous HTTPS JSON reporter for completed matches. It is disabled by default:
+
+    * `enabled`: Set to `true` to send one report when a match room closes.
+
+    * `uri`: HTTPS endpoint that accepts JSON POST requests containing player names, team and position, each player's original main/extra/side card codes, the final team scores, and a `duels` array containing the winning team ID for each duel (`2` means draw).
 
   * `repos`: An array of repositories settings that will be cloned and synchronized for usage by Multirole's services, each repository object must have the following fields:
 

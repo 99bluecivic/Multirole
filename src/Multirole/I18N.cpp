@@ -62,6 +62,17 @@ Str CLIENT_ROOM_REPLAY_TOO_BIG =
 "Unable to send replay, its size exceeds the maximum capacity.";
 Str CLIENT_ROOM_CORE_EXCEPT =
 "Internal scripting engine error! This incident has been reported.";
+Str CLIENT_ROOM_SCORE_ANNOUNCEMENT = "{0} {1} - {2} {3}";
+Str MATCH_REPORTER_URI_INVALID = "Match reporter URI is invalid.";
+Str MATCH_REPORTER_HTTPS_REQUIRED = "Match reporter URI must use HTTPS.";
+Str MATCH_REPORTER_RESOLVE_ERROR = "Match reporter URI host could not be resolved.";
+Str MATCH_REPORTER_CONNECT_ERROR = "Match reporter connection failed:";
+Str MATCH_REPORTER_HANDSHAKE_ERROR = "Match reporter TLS handshake failed:";
+Str MATCH_REPORTER_WRITE_ERROR = "Match reporter request failed to send:";
+Str MATCH_REPORTER_READ_ERROR = "Match reporter response failed to read:";
+Str MATCH_REPORTER_SHUTDOWN_ERROR = "Match reporter TLS shutdown failed:";
+Str MATCH_REPORTER_HTTP_ERROR = "Match reporter returned an HTTP error:";
+Str MATCH_REPORTER_REQUEST_ERROR = "Match reporter request could not be created:";
 
 Str SCRIPT_LOGGER_USER_MSG = "User debug message: ";
 
